@@ -16,10 +16,14 @@ class Login extends React.Component{
   }
   handleSubmit = async (ev)=>{
     ev.preventDefault()
-    const {registeredUser} = this.state;
-    this.setState({loadingForm:true})
+    const {registeredUser,username,password,confirm_password} = this.state;
 
-    const {username,password} = this.state;
+    if(!registeredUser && (password!==confirm_password)){
+      this.setState({errorSignin:[{path:"password",message: "passwords don't match"}], loadingForm:false})
+      return false;
+    }
+
+    this.setState({loadingForm:true})
     const {data:{[registeredUser?'login':'createUser']:{success, token, refreshToken, errors}}} = await this.props[registeredUser?'login':'signup']({
       variables: {username,password}
     })
@@ -54,6 +58,11 @@ class Login extends React.Component{
           <Form.Group widths='equal'>
             <Form.Field name="username" label='Username' control='input' placeholder='Username' onChange={this.handleChange} />
             <Form.Field name="password" label='Password' control='input' type="password" placeholder='Password' onChange={this.handleChange} />
+            {
+              !registeredUser && (
+                <Form.Field name="confirm_password" label='Confirm password' control='input' type="password" placeholder='Confirm password' onChange={this.handleChange} />
+              )
+            }
           </Form.Group>
           <Button type='submit'>{registeredUser?'SignIn':'SignUp'}</Button><br />
           {
