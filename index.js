@@ -30,7 +30,23 @@ app.use(auth.getHeaders);
 //GRAPHQL
 const graphqlEndpoint = '/graphql';
 app.use(graphqlEndpoint, bodyParser.json(),
-  graphqlExpress(req => ({
+  // (req, res, next) => {
+  //   const context = { session:req.session }
+  //   graphqlExpress({
+  //     schema,
+  //     context: {
+  //       models,
+  //       SECRET: process.env.SECRET,
+  //       SECRET2: process.env.SECRET2,
+  //       user: req.user,
+  //       isAdmin: req.isAdmin,
+  //       isTeacher: req.isTeacher,
+  //     }
+  //   })(req, res, next)
+  // }
+  graphqlExpress((req) => {
+    console.log("req:",req.user);
+    return {
     schema,
     context: {
       models,
@@ -40,7 +56,7 @@ app.use(graphqlEndpoint, bodyParser.json(),
       isAdmin: req.isAdmin,
       isTeacher: req.isTeacher,
     }
-  }))
+  }})
 );
   //---LOAD GraphiQL IF DEVELOPMENT
 if (process.env.NODE_ENV === 'development') {

@@ -18,7 +18,7 @@ const httpLink = createHttpLink({ uri: graphqlHost });
 const middlewareLink = setContext(() => ({headers: {
   'x-token': localStorage.getItem('token') || null,
   'x-refresh-token': localStorage.getItem('refreshToken') || null,
-}}));
+}}) );
 
 const afterwareLink = new ApolloLink((operation, forward) => {
   return forward(operation).map(response => {

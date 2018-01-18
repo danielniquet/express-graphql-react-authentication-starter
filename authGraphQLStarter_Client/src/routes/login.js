@@ -27,13 +27,14 @@ class Login extends React.Component{
     const {data:{[registeredUser?'login':'createUser']:{success, token, refreshToken, errors}}} = await this.props[registeredUser?'login':'signup']({
       variables: {username,password}
     })
+    // console.log(success, token, refreshToken, errors);
     if(!success){
       this.setState({errorSignin:errors, loadingForm:false})
     }else if(token && refreshToken){
-      this.setState({errorSignin:[], loadingForm:false})
       localStorage.setItem('token',token);
       localStorage.setItem('refreshToken',refreshToken);
-      this.props.history.push('/me')
+      this.props.history.go('/me')
+      // this.setState({errorSignin:[], loadingForm:false})
     }
   }
   handleRegisteredUser = (ev)=>{

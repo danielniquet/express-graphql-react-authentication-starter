@@ -1,8 +1,7 @@
 import React from 'react';
-// import Toolbar from '../components/toolbar';
 
-
-
-// const userItem = (user,i)=><li key={"i"+i}>{user.username}</li>
-
-export default ()=> <div>home</div>
+export default ({logged})=> {
+  return logged
+    ?<div>home logged</div>
+    :<div>home</div>
+}

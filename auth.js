@@ -11,7 +11,6 @@ const auth = {
     return [token,refreshToken];
   },
   login: async (username, password, User, SECRET, SECRET2)=>{
-    console.log('hola mundo');
     const user = await User.findOne({username})
     if(!user){
       return {
@@ -26,9 +25,9 @@ const auth = {
         errors:[{path:'password', message:'Invalid Password'}]
       }
     }
-
+    // console.log("user:[auth.login]",user);
     const refreshTokenSecret = user.password + SECRET2;
-    console.log('refreshTokenSecret:[auth.login]',user.password,SECRET2,refreshTokenSecret);
+    // console.log('refreshTokenSecret:[auth.login]',user.password,SECRET2,refreshTokenSecret);
     const [token,refreshToken] = auth.getTokens(user, SECRET, refreshTokenSecret)
 
     return {
@@ -68,7 +67,7 @@ const auth = {
     return {
       token: newToken,
       refreshToken: newRefreshToken,
-      user: user._id,
+      // user: user._id,
       isAdmin: user.isAdmin,
       isTeacher: user.isTeacher,
     };
@@ -79,7 +78,7 @@ const auth = {
     if (token) {
       try {
         const { user, isAdmin, isTeacher } = jwt.verify(token, process.env.SECRET);
-        console.log('user[auth.getHeaders]:',  user);
+        // console.log('user[auth.getHeaders]:',  user);
         req.user = user;
         req.isAdmin = isAdmin;
         req.isTeacher = isTeacher;

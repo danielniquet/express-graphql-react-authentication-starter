@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import decode from 'jwt-decode';
 
-// import Home from './home';
+import Home from './home';
 import Login from './login';
 import Me from './me';
 
@@ -60,13 +60,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+const xx = <div>home2</div>
+
 
 export default ()=>(
   <Router>
     <div>
         <AuthButton/>
       <Switch>
-        {/* <Route path="/public" component={Public}/> */}
+        <Route exact path="/" render={props => <Home {...props} logged={isAuthenticated()} />}/>
         <Route path="/login" render={props => <Login {...props} logged={isAuthenticated()} />} />
         <PrivateRoute path="/me" component={Me}/>
       </Switch>

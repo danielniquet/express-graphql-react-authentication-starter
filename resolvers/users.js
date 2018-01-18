@@ -6,8 +6,7 @@ import requiresAuth, { requiresAdmin,requiresTeacher } from '../permissions';
 
 export default {
   Query: {
-    me: requiresAuth.createResolver( (parent, args, { models, user }) => models.User.findOne({ _id: user }))
-      ,
+    me: requiresAuth.createResolver( (parent, args, { models, user }) => models.User.findOne({ _id: user }) ),
     allUsers: requiresAuth.createResolver(async (parent, args, {models}) => {
       try {
         const user = await models.User.find();
@@ -37,7 +36,7 @@ export default {
     }),
   },
   Mutation: {
-    login: async (parent, {username, password}, {models:{User}, SECRET, SECRET2})=> auth.login(username, password, User, SECRET, SECRET2),
+    login: async (parent, {username, password}, {models:{User}, SECRET, SECRET2, user})=> auth.login(username, password, User, SECRET, SECRET2),
     createUser: async (parent, {password, ...args}, {models:{User}, SECRET, SECRET2}) => {
       const otherErrors = []
       let login=null
