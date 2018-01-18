@@ -18,22 +18,22 @@ import Me from './me';
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
-
+  let xx = true
   try {
-    decode(token);
+    xx = decode(token);
     decode(refreshToken);
   } catch (err) {
     return false;
   }
 
-  return true;
+  return xx;
 };
 const signout = (cb) => {
   localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
   setTimeout(cb, 100)
 }
-const AuthButton = withRouter(({ history }) => (
+const Header = withRouter(({ history }) => (
   isAuthenticated() ? (
     <p>
       Welcome! <button onClick={() => {
@@ -60,13 +60,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
-const xx = <div>home2</div>
-
-
 export default ()=>(
   <Router>
     <div>
-        <AuthButton/>
+      <Header />
       <Switch>
         <Route exact path="/" render={props => <Home {...props} logged={isAuthenticated()} />}/>
         <Route path="/login" render={props => <Login {...props} logged={isAuthenticated()} />} />

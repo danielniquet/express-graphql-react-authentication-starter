@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container,Button, Divider, Form,Message} from 'semantic-ui-react';
 import {graphql, compose} from 'react-apollo';
+import { Redirect } from 'react-router'
 import queries from '../queries';
 
 class Login extends React.Component{
@@ -10,6 +11,7 @@ class Login extends React.Component{
     errorSignin: [],
     loadingForm: false,
     registeredUser: false,
+    redirect: this.props.logged || false,
   }
   handleChange = ({target:{name,value}})=>{
     this.setState(newState=>({[name]:value}))
@@ -27,13 +29,14 @@ class Login extends React.Component{
     const {data:{[registeredUser?'login':'createUser']:{success, token, refreshToken, errors}}} = await this.props[registeredUser?'login':'signup']({
       variables: {username,password}
     })
-    // console.log(success, token, refreshToken, errors);
     if(!success){
       this.setState({errorSignin:errors, loadingForm:false})
     }else if(token && refreshToken){
       localStorage.setItem('token',token);
       localStorage.setItem('refreshToken',refreshToken);
-      this.props.history.go('/me')
+      setTimeout(()=>{
+        this.setState({redirect:true})
+      }, 100)
       // this.setState({errorSignin:[], loadingForm:false})
     }
   }
@@ -43,16 +46,13 @@ class Login extends React.Component{
       return {registeredUser:!newState.registeredUser}
     })
   }
-  componentDidMount(){
-    const {logged} = this.props;
-    if(logged){
-      this.props.history.push('/me')
-    }
-  }
+
   render(){
     const errors = this.state.errorSignin;
-    const {loadingForm, registeredUser} = this.state;
-
+    const {loadingForm, registeredUser, redirect} = this.state;
+    if (redirect) {
+       return <Redirect to='/'/>;
+    }
     return (
       <Container text>
         <Form size={'tiny'} onSubmit={this.handleSubmit} loading={loadingForm}>
