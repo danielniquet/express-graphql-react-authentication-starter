@@ -67,7 +67,7 @@ const auth = {
     return {
       token: newToken,
       refreshToken: newRefreshToken,
-      // user: user._id,
+      user: user._id,
       isAdmin: user.isAdmin,
       isTeacher: user.isTeacher,
     };
